@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-bg-primary text-text-primary font-sans;
+    overflow-x: hidden;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-bg-primary;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-bg-elevated rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-border-strong;
+  }
+
+  /* Text selection */
+  ::selection {
+    @apply bg-accent text-white;
+  }
+}
+
+@layer components {
+  /* Container — max-width + responsive padding */
+  .container-custom {
+    @apply max-w-container mx-auto px-5 md:px-8 lg:px-10;
+  }
+
+  /* Section vertical padding */
+  .section-padding {
+    @apply py-16 md:py-24;
+  }
+
+  /* Button base */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 font-medium
+           transition-all duration-300 ease-smooth
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Button variants */
+  .btn-primary {
+    @apply btn bg-white text-bg-primary px-6 py-3 rounded-full
+           hover:bg-text-secondary hover:scale-[1.02] active:scale-[0.98];
+  }
+
+  .btn-accent {
+    @apply btn bg-accent text-white px-6 py-3 rounded-full
+           hover:bg-accent-hover hover:scale-[1.02] active:scale-[0.98];
+  }
+
+  .btn-outline {
+    @apply btn border border-border-hover text-text-primary
+           px-6 py-3 rounded-full
+           hover:bg-bg-tertiary hover:border-border-strong;
+  }
+
+  /* Small uppercase section label */
+  .section-label {
+    @apply text-tiny font-semibold uppercase text-accent tracking-widest;
+  }
+
+  /* Divider */
+  .divider {
+    @apply border-t border-border;
+  }
+}
+
+  /* Hide scrollbar for horizontal scroll */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
