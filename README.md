@@ -1,34 +1,52 @@
-# NEXUS — Premium E-commerce Store
+# NEXUS
 
-A modern, dark-themed e-commerce store built with React, Tailwind CSS, and Vite. Features full cart system, WhatsApp order integration, and Cash on Delivery support.
+A dark-themed e-commerce store built with React and Tailwind. Full cart, WhatsApp checkout, and Cash on Delivery support.
 
-**🔗 Live Demo:** [nexus-store-mu.vercel.app](https://nexus-store-mu.vercel.app)
+**Live Demo:** https://nexus-store-mu.vercel.app
 
-## ✨ Features
+## Why I Built This
 
-- 🛒 Full cart system (Context API + localStorage)
-- 📱 WhatsApp order integration
-- 🔍 Search with modal
-- 🎨 Category filters + sort
-- 📦 Product gallery with image zoom
-- 💰 COD + JazzCash/EasyPaisa support
-- 📱 Mobile-first responsive design
-- ⚡ Fast build with Vite + React 19
+Got tired of building todo apps. Wanted something with real complexity — cart state, form validation, checkout flow. E-commerce has all of it.
 
-## 🛠 Tech Stack
+Also, I'm from Pakistan, where most small stores take orders on WhatsApp. So I built the checkout around that instead of a fake credit card form.
 
-- **React 19** + Vite
-- **Tailwind CSS v3**
-- **React Router v7**
-- **Framer Motion** (animations)
-- **Lucide React** (icons)
-- **Context API** + localStorage
-- **Vercel** (deployment)
+## Features
 
-## 🏃 Run Locally
+- Cart with localStorage — survives page refresh
+- WhatsApp checkout with auto-formatted order details
+- Form validation with real rules (no numbers in names, proper phone format)
+- Product search with live filtering
+- Category filters and sorting
+- Image gallery with thumbnails
+- Fully responsive
+
+## Tech Stack
+
+- React 19 + Vite
+- Tailwind CSS v3
+- React Router v7
+- Framer Motion
+- Context API + localStorage
+- Vercel
+
+## Run Locally
 
 ```bash
-git clone https://github.com/sa1717595-coder/nexus-store.git
+git clone https://github.com/saad-dev-1/nexus-store.git
 cd nexus-store
 npm install
 npm run dev
+
+Project Notes
+Products are in src/data/products.js
+
+Store info (WhatsApp number, messages) is in src/data/siteConfig.js
+
+Frontend only — no backend, orders go via WhatsApp
+
+Dark theme design tokens are in tailwind.config.js
+
+Contact
+Email: sa1717595@gmail.com
+
+GitHub: @saad-dev-1
