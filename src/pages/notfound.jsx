@@ -12,7 +12,7 @@ export default function NotFound() {
           Page not found
         </h1>
         <p className="text-body text-text-secondary mb-8 max-w-md mx-auto">
-          Yahan kuch nahi hai. Wapas home chalein?
+          Nothing here. Go back home?
         </p>
         <Link to="/" className="btn-accent inline-flex group">
           <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />

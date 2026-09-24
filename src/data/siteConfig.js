@@ -5,7 +5,7 @@ export const siteConfig = {
   // Brand
   brandName: "NEXUS",
   tagline: "Premium Tech Accessories",
-  taglineRoman: "Pakistan bhar mein delivery. Ghar baithe order karo.",
+  taglineRoman: "Delivered across Pakistan. Order from home.",
   description:
     "Premium tech accessories for modern Pakistan. Original products, fast delivery, honest prices.",
   address: "Sargodha, Pakistan",
@@ -38,7 +38,7 @@ export const siteConfig = {
     "Free Delivery on Orders Above Rs. 2,999",
     "Same-Day Dispatch Before 3PM",
     "Flat 10% Off on First Order",
-    "Order Karo, Ghar Baithe Pao",
+    "Order Online, Delivered Home",
     "Trusted by 10,000+ Customers",
   ],
 };

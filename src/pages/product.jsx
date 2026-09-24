@@ -44,10 +44,10 @@ export default function Product() {
             Product Not Found
           </p>
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-[-0.04em] mb-4">
-            Ye product available nahi hai
+            This product is not available
           </h1>
           <p className="text-body text-text-secondary mb-8 max-w-md mx-auto">
-            Ho sakta hai ye product remove ho gaya ho ya link galat ho.
+            This product may have been removed or the link is incorrect.
           </p>
           <Link
             to="/shop"

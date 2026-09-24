@@ -280,7 +280,7 @@ export default function Contact() {
                       Message bhej diya! ✨
                     </h3>
                     <p className="text-small text-text-secondary">
-                      Hum jaldi hi reply karenge.
+                      We will reply shortly.
                     </p>
                   </motion.div>
                 ) : (
@@ -311,7 +311,7 @@ export default function Contact() {
                       <textarea
                         value={form.message}
                         onChange={(e) => handleChange("message", e.target.value)}
-                        placeholder="Apna message yahan likhein..."
+                        placeholder="Write your message here..."
                         rows={5}
                         className={`w-full rounded-xl border bg-bg-primary px-4 py-3 text-small text-text-primary placeholder:text-text-muted outline-none transition-all duration-300 focus:ring-1 resize-none ${
                           errors.message

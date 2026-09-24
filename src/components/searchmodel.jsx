@@ -187,7 +187,7 @@ export default function SearchModal({ isOpen, onClose }) {
                     </kbd>{" "}
                     to close
                   </span>
-                  <span>Search across 500+ products</span>
+                  <span>Search across our collection</span>
                 </div>
               </div>
             </div>

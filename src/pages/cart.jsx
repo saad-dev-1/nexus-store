@@ -51,9 +51,9 @@ export default function Cart() {
             <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-bg-elevated mb-5">
               <ShoppingBag size={28} className="text-text-muted" />
             </div>
-            <h2 className="text-h4 font-semibold mb-2">Cart khali hai</h2>
+            <h2 className="text-h4 font-semibold mb-2">Your cart is empty</h2>
             <p className="text-small text-text-secondary mb-6">
-              Shop karo aur apna cart bharo!
+              Start shopping and fill your cart!
             </p>
             <Link to="/shop" className="btn-accent group inline-flex">
               Start Shopping

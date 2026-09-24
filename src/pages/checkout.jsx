@@ -18,20 +18,28 @@ import {
 import { useCart } from "../context/cartcontext";
 import { formatPrice } from "../data/products";
 
-// ⚠️ YAHAN APNA WHATSAPP NUMBER DAALO (no +, no spaces, no dashes)
-const STORE_WHATSAPP = "923424960779"; // +92 300 1234567
+const STORE_WHATSAPP = "923424960779";
 
 export default function Checkout() {
   const { items, totalPrice, clearCart } = useCart();
 
-  const [form, setForm] = useState({
-    fullName: "",
-    phone: "",
-    email: "",
-    address: "",
-    city: "",
-    postalCode: "",
-    notes: "",
+  // Lazy init — localStorage se auto-fill
+  const [form, setForm] = useState(() => {
+    const defaults = {
+      fullName: "",
+      phone: "",
+      email: "",
+      address: "",
+      city: "",
+      postalCode: "",
+      notes: "",
+    };
+    try {
+      const saved = localStorage.getItem("nexus_customer");
+      return saved ? { ...defaults, ...JSON.parse(saved) } : defaults;
+    } catch {
+      return defaults;
+    }
   });
 
   const [paymentMethod, setPaymentMethod] = useState("cod");
@@ -45,13 +53,14 @@ export default function Checkout() {
     totalPrice >= FREE_SHIPPING_THRESHOLD || totalPrice === 0 ? 0 : 199;
   const finalTotal = totalPrice + shippingCost;
 
+  // ─── EMPTY CART VIEW ───
   if (items.length === 0 && !orderPlaced) {
     return (
       <section className="section-padding">
         <div className="container-custom text-center py-20">
-          <h1 className="text-h2 font-bold mb-4">Cart khali hai</h1>
+          <h1 className="text-h2 font-bold mb-4">Your cart is empty</h1>
           <p className="text-body text-text-secondary mb-8">
-            Checkout se pehle kuch items add karo.
+            Add some items before checkout.
           </p>
           <Link to="/shop" className="btn-accent inline-flex">
             Start Shopping
@@ -61,6 +70,7 @@ export default function Checkout() {
     );
   }
 
+  // ─── ORDER SUCCESS VIEW ───
   if (orderPlaced) {
     return (
       <section className="section-padding">
@@ -80,11 +90,18 @@ export default function Checkout() {
             </h1>
 
             <p className="text-body text-text-secondary mb-2">
-              Shukriya, <span className="text-text-primary font-medium">{form.fullName}</span>!
+              Thank you,{" "}
+              <span className="text-text-primary font-medium">
+                {form.fullName}
+              </span>
+              !
             </p>
             <p className="text-body text-text-secondary mb-8">
-              Aapka order <span className="text-accent font-medium">#{orderId}</span> confirm ho gaya hai.
-              Hum jaldi hi <span className="text-accent font-medium">{form.phone}</span> pe contact karenge.
+              Your order{" "}
+              <span className="text-accent font-medium">#{orderId}</span>{" "}
+              has been confirmed. We will contact you shortly at{" "}
+              <span className="text-accent font-medium">{form.phone}</span> pe
+              contact karenge.
             </p>
 
             <div className="rounded-2xl border border-border bg-bg-secondary p-5 mb-8 text-left">
@@ -114,7 +131,7 @@ export default function Checkout() {
             </div>
 
             <p className="text-small text-text-muted mb-6">
-              Order details WhatsApp pe bhi bhej di gayi hain.
+              Order details have also been sent to WhatsApp.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -137,39 +154,97 @@ export default function Checkout() {
     );
   }
 
+  // ─── VALIDATION (Negative Testing) ───
   const validate = () => {
     const errs = {};
-    if (!form.fullName.trim()) errs.fullName = "Full name required";
-    if (!form.phone.trim()) errs.phone = "Phone number required";
-    else if (!/^(\+92|0)?3\d{9}$/.test(form.phone.replace(/\s/g, "")))
-      errs.phone = "Valid Pakistani number daalein (03001234567)";
-    if (!form.address.trim()) errs.address = "Address required";
-    if (!form.city.trim()) errs.city = "City required";
+
+    // FULL NAME: only letters, spaces, hyphens, apostrophes, dots
+    const name = form.fullName.trim();
+    if (!name) {
+      errs.fullName = "Full name required";
+    } else if (name.length < 3) {
+      errs.fullName = "Name must be at least 3 characters";
+    } else if (!/^[a-zA-Z\s'.-]+$/.test(name)) {
+      errs.fullName =
+        "Name can only contain letters (numbers not allowed)";
+    }
+
+    // PHONE: valid Pakistani format
+    const phone = form.phone.replace(/[\s-]/g, "");
+    if (!phone) {
+      errs.phone = "Phone number required";
+    } else if (!/^(\+92|92|0)?3\d{9}$/.test(phone)) {
+      errs.phone = "Enter a valid Pakistani number (03001234567)";
+    } else if (/^(\d)\1{9,}$/.test(phone)) {
+      errs.phone = "This number doesn't look valid";
+    }
+
+    // EMAIL (optional but if provided, must be valid)
+    if (
+      form.email.trim() &&
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())
+    ) {
+      errs.email = "Enter a valid email address";
+    }
+
+    // ADDRESS: min length + at least 1 letter
+    const address = form.address.trim();
+    if (!address) {
+      errs.address = "Address required";
+    } else if (address.length < 10) {
+      errs.address = "Enter a complete address (house #, street, area)";
+    } else if (!/[a-zA-Z]/.test(address)) {
+      errs.address = "Address must contain letters too";
+    }
+
+    // CITY: only letters, min 2 chars
+    const city = form.city.trim();
+    if (!city) {
+      errs.city = "City required";
+    } else if (city.length < 2) {
+      errs.city = "Enter a valid city name";
+    } else if (!/^[a-zA-Z\s-]+$/.test(city)) {
+      errs.city = "City can only contain letters";
+    }
+
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
 
+  // ─── REAL-TIME INPUT FILTERING ───
   const handleChange = (field, value) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
+    let cleaned = value;
+
+    if (field === "fullName") {
+      cleaned = value.replace(/[^a-zA-Z\s'.-]/g, "");
+    }
+    if (field === "phone") {
+      cleaned = value.replace(/[^\d+\s-]/g, "");
+    }
+    if (field === "city") {
+      cleaned = value.replace(/[^a-zA-Z\s-]/g, "");
+    }
+
+    setForm((prev) => ({ ...prev, [field]: cleaned }));
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: "" }));
     }
   };
 
-  // Generate Order ID
+  // ─── GENERATE ORDER ID ───
   const generateOrderId = () => {
     const timestamp = Date.now().toString().slice(-6);
     return `NX${timestamp}`;
   };
 
-  // Build WhatsApp message with order details
+  // ─── BUILD WHATSAPP MESSAGE ───
   const buildWhatsAppMessage = (id) => {
     const paymentLabel =
       paymentMethod === "cod"
         ? "Cash on Delivery"
         : paymentMethod === "jazzcash"
-        ? "JazzCash / EasyPaisa"
-        : "Bank Transfer";
+          ? "JazzCash / EasyPaisa"
+          : "Bank Transfer";
 
     let msg = `🛒 *NEW ORDER — NEXUS*%0A%0A`;
     msg += `*Order ID:* #${id}%0A`;
@@ -185,12 +260,14 @@ export default function Checkout() {
     items.forEach((item) => {
       msg += `• ${item.name}%0A`;
       msg += `   Qty: ${item.quantity} × ${formatPrice(item.price)} = ${formatPrice(
-        item.price * item.quantity
+        item.price * item.quantity,
       )}%0A`;
     });
 
     msg += `%0A*Subtotal:* ${formatPrice(totalPrice)}%0A`;
-    msg += `*Shipping:* ${shippingCost === 0 ? "FREE" : formatPrice(shippingCost)}%0A`;
+    msg += `*Shipping:* ${
+      shippingCost === 0 ? "FREE" : formatPrice(shippingCost)
+    }%0A`;
     msg += `*TOTAL:* ${formatPrice(finalTotal)}%0A`;
 
     if (form.notes) {
@@ -201,39 +278,40 @@ export default function Checkout() {
     return msg;
   };
 
+  // ─── SUBMIT HANDLER ───
   const handleSubmit = (e) => {
-  e.preventDefault();
-  if (!validate()) return;
+    e.preventDefault();
+    if (!validate()) return;
 
-  setIsSubmitting(true);
+    setIsSubmitting(true);
 
-  const newOrderId = generateOrderId();
-  setOrderId(newOrderId);
+    const newOrderId = generateOrderId();
+    setOrderId(newOrderId);
 
-  // Build WhatsApp URL
-  const message = buildWhatsAppMessage(newOrderId);
-  const whatsappUrl = `https://wa.me/${STORE_WHATSAPP}?text=${message}`;
+    // Save customer info for next order (auto-fill)
+    localStorage.setItem("nexus_customer", JSON.stringify(form));
 
-  // Open WhatsApp IMMEDIATELY (user gesture se connected — no popup block)
-  const whatsappWindow = window.open(whatsappUrl, "_blank");
-  // Save customer info for next order (auto-fill)
-localStorage.setItem("nexus_customer", JSON.stringify(form));
+    // Build WhatsApp URL
+    const message = buildWhatsAppMessage(newOrderId);
+    const whatsappUrl = `https://wa.me/${STORE_WHATSAPP}?text=${message}`;
 
-  // Agar popup block hua
-  if (!whatsappWindow) {
-    alert(
-      "WhatsApp open nahi ho saka. Please popup blocker off karein, ya direct WhatsApp pe order bhejein: +92 342 4960779"
-    );
-  }
+    // Open WhatsApp IMMEDIATELY
+    const whatsappWindow = window.open(whatsappUrl, "_blank");
 
-  // UI update
-  setTimeout(() => {
-    setIsSubmitting(false);
-    setOrderPlaced(true);
-    clearCart();
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, 800);
-};
+    if (!whatsappWindow) {
+      alert(
+        "WhatsApp open nahi ho saka. Please popup blocker off karein, ya direct WhatsApp pe order bhejein: +92 342 4960779",
+      );
+    }
+
+    // UI update
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setOrderPlaced(true);
+      clearCart();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 800);
+  };
 
   return (
     <section className="section-padding">
@@ -251,7 +329,7 @@ localStorage.setItem("nexus_customer", JSON.stringify(form));
             Checkout
           </h1>
           <p className="text-body text-text-secondary">
-            Details fill karein aur order place karein.
+            Fill in your details and place your order.
           </p>
         </div>
 
@@ -292,6 +370,7 @@ localStorage.setItem("nexus_customer", JSON.stringify(form));
                       type="email"
                       value={form.email}
                       onChange={(v) => handleChange("email", v)}
+                      error={errors.email}
                     />
                   </div>
                 </div>
@@ -339,7 +418,7 @@ localStorage.setItem("nexus_customer", JSON.stringify(form));
                     <textarea
                       value={form.notes}
                       onChange={(e) => handleChange("notes", e.target.value)}
-                      placeholder="Koi khaas instruction?"
+                      placeholder="Any special instructions?"
                       rows={3}
                       className="w-full rounded-xl border border-border bg-bg-primary px-4 py-3 text-small text-text-primary placeholder:text-text-muted outline-none transition-all duration-300 focus:border-accent focus:ring-1 focus:ring-accent/30 resize-none"
                     />
@@ -366,7 +445,7 @@ localStorage.setItem("nexus_customer", JSON.stringify(form));
                   />
                   <PaymentOption
                     label="JazzCash / EasyPaisa"
-                    description="Mobile wallet payment (details WhatsApp pe bhejenge)"
+                    description="Mobile wallet payment (details sent on WhatsApp)"
                     selected={paymentMethod === "jazzcash"}
                     onSelect={() => setPaymentMethod("jazzcash")}
                   />
@@ -393,7 +472,11 @@ localStorage.setItem("nexus_customer", JSON.stringify(form));
                         <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-bg-elevated overflow-hidden">
                           <div className="absolute h-8 w-8 rounded-full bg-accent/15 blur-lg" />
                           {Icon && (
-                            <Icon size={20} className="relative text-accent" strokeWidth={1.5} />
+                            <Icon
+                              size={20}
+                              className="relative text-accent"
+                              strokeWidth={1.5}
+                            />
                           )}
                           <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-accent text-[10px] font-bold text-white flex items-center justify-center">
                             {item.quantity}
@@ -415,11 +498,17 @@ localStorage.setItem("nexus_customer", JSON.stringify(form));
                 <div className="flex flex-col gap-3 pb-5 border-b border-border">
                   <div className="flex items-center justify-between text-small">
                     <span className="text-text-secondary">Subtotal</span>
-                    <span className="font-medium">{formatPrice(totalPrice)}</span>
+                    <span className="font-medium">
+                      {formatPrice(totalPrice)}
+                    </span>
                   </div>
                   <div className="flex items-center justify-between text-small">
                     <span className="text-text-secondary">Shipping</span>
-                    <span className={`font-medium ${shippingCost === 0 ? "text-success" : ""}`}>
+                    <span
+                      className={`font-medium ${
+                        shippingCost === 0 ? "text-success" : ""
+                      }`}
+                    >
                       {shippingCost === 0 ? "FREE" : formatPrice(shippingCost)}
                     </span>
                   </div>
@@ -441,7 +530,7 @@ localStorage.setItem("nexus_customer", JSON.stringify(form));
                 </button>
 
                 <p className="text-tiny text-text-muted text-center mb-4">
-                  Order details WhatsApp pe bhej di jayengi
+                  Order details will be sent to WhatsApp
                 </p>
 
                 <div className="flex flex-col gap-2 pt-5 border-t border-border">
@@ -467,7 +556,15 @@ localStorage.setItem("nexus_customer", JSON.stringify(form));
   );
 }
 
-function FormInput({ label, icon: Icon, placeholder, value, onChange, error, type = "text" }) {
+function FormInput({
+  label,
+  icon: Icon,
+  placeholder,
+  value,
+  onChange,
+  error,
+  type = "text",
+}) {
   return (
     <div>
       <label className="text-small font-medium text-text-secondary mb-2 block">

@@ -133,9 +133,9 @@ function EmptyState({ onClose }) {
       <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-bg-tertiary mb-5">
         <ShoppingBag size={26} className="text-text-muted" />
       </div>
-      <h3 className="text-h4 font-semibold mb-2">Cart khali hai</h3>
+      <h3 className="text-h4 font-semibold mb-2">Your cart is empty</h3>
       <p className="text-small text-text-secondary mb-6">
-        Kuch products add karo aur yahan dekho!
+        Add some products to see them here!
       </p>
       <Link to="/shop" onClick={onClose} className="btn-accent">
         Start Shopping
