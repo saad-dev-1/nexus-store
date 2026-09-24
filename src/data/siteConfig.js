@@ -1,4 +1,4 @@
-// ⚠️ YAHAN SAB INFO UPDATE KARO — SIRF YE FILE EDIT KARO
+﻿// Update all info here — only edit this file
 // Future mein kahin aur change karne ki zaroorat nahi
 
 export const siteConfig = {
@@ -11,14 +11,14 @@ export const siteConfig = {
   address: "Sargodha, Pakistan",
   since: "2024",
 
-  // Contact — SAME number dono jagah (warna confusion)
-    // Contact — SAME number dono jagah (warna confusion)
+  // Contact â€” SAME number dono jagah (warna confusion)
+    // Contact â€” SAME number dono jagah (warna confusion)
     phone: "+92 342 4960779",
   phoneLink: "+923424960779",
-  whatsappNumber: "923424960779",    // WhatsApp — no +, no spaces   // WhatsApp — phone wala hi rakho (no +, no spaces)
+  whatsappNumber: "923424960779",    // WhatsApp â€” no +, no spaces   // WhatsApp â€” phone wala hi rakho (no +, no spaces)
   email: "sa1717595@gmail.com",
 
-  // Social — full URLs (baad mein actual link daalo)
+  // Social â€” full URLs (baad mein actual link daalo)
   social: {
     instagram: "https://www.instagram.com/saadahm__x?stkn=MWI4Y2R0eGswbnJ6",
     facebook: "https://www.facebook.com/share/1EHYdxkVJC/",   // Facebook ka pura URL baad mein daalo

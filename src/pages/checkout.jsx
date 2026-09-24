@@ -101,7 +101,7 @@ export default function Checkout() {
               <span className="text-accent font-medium">#{orderId}</span>{" "}
               has been confirmed. We will contact you shortly at{" "}
               <span className="text-accent font-medium">{form.phone}</span> pe
-              contact karenge.
+              .
             </p>
 
             <div className="rounded-2xl border border-border bg-bg-secondary p-5 mb-8 text-left">
@@ -274,7 +274,7 @@ export default function Checkout() {
       msg += `%0A*📝 NOTES*%0A${form.notes}%0A`;
     }
 
-    msg += `%0A%0AShukriya! 🙌`;
+    msg += `%0A%0AThank you! 🙌`;
     return msg;
   };
 
@@ -300,7 +300,7 @@ export default function Checkout() {
 
     if (!whatsappWindow) {
       alert(
-        "WhatsApp open nahi ho saka. Please popup blocker off karein, ya direct WhatsApp pe order bhejein: +92 342 4960779",
+        "WhatsApp could not open. Please disable popup blocker, or send your order directly on WhatsApp: +92 342 4960779",
       );
     }
 

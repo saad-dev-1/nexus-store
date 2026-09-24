@@ -71,7 +71,7 @@ export default function Contact() {
     const errs = {};
     if (!form.name.trim()) errs.name = "Name required";
     if (!form.email.trim()) errs.email = "Email required";
-    else if (!/^\S+@\S+\.\S+$/.test(form.email)) errs.email = "Valid email daalein";
+    else if (!/^\S+@\S+\.\S+$/.test(form.email)) errs.email = "Enter a valid email";
     if (!form.message.trim()) errs.message = "Message required";
     setErrors(errs);
     return Object.keys(errs).length === 0;
@@ -277,7 +277,7 @@ export default function Contact() {
                       <CheckCircle2 size={32} className="text-success" />
                     </div>
                     <h3 className="text-h4 font-semibold mb-2">
-                      Message bhej diya! ✨
+                      Message sent! ✨
                     </h3>
                     <p className="text-small text-text-secondary">
                       We will reply shortly.
