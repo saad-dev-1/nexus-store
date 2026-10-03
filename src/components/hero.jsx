@@ -35,14 +35,14 @@ export default function Hero() {
           >
             {/* Free delivery badge — simple */}
             <motion.div
-              variants={fadeUp}
-              className="flex items-center gap-2 rounded-full border border-border px-4 py-2 mb-4"
-            >
-              <Truck size={14} className="text-accent" />
-              <span className="text-tiny text-text-secondary font-medium">
-                Free delivery across Pakistan
-              </span>
-            </motion.div>
+  variants={fadeUp}
+  className="flex items-center gap-2 rounded-full border border-accent/30 bg-accent/5 px-4 py-2 mb-4 shadow-lg shadow-accent/10"
+>
+  <Truck size={14} className="text-accent" />
+  <span className="text-tiny text-text-secondary font-medium">
+    Free delivery across Pakistan
+  </span>
+</motion.div>
 
             {/* Hero heading — gradient */}
             <motion.h1
