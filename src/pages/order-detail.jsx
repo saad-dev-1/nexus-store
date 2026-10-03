@@ -10,10 +10,15 @@ import {
   CreditCard,
   Truck,
   XCircle,
+  Download,
 } from "lucide-react";
 import { useAuth } from "../context/authcontext";
 import { orderAPI } from "../services/api";
 import { formatPrice } from "../data/products";
+
+// ─── API Base URL ───
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1";
 
 export default function OrderDetail() {
   const { id } = useParams();
@@ -24,6 +29,7 @@ export default function OrderDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [cancelling, setCancelling] = useState(false);
+  const [downloadingInvoice, setDownloadingInvoice] = useState(false);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -65,6 +71,43 @@ export default function OrderDetail() {
       alert(err.response?.data?.message || "Cancel failed");
     } finally {
       setCancelling(false);
+    }
+  };
+
+  const handleDownloadInvoice = async () => {
+    setDownloadingInvoice(true);
+
+    try {
+      const token = localStorage.getItem("auth_token");
+
+      const response = await fetch(
+        `${API_BASE_URL}/orders/${order.id}/invoice`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/pdf",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Download failed: ${response.status}`);
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `invoice-${order.order_number}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Invoice download failed:", err);
+      alert("Invoice download failed. Please try again.");
+    } finally {
+      setDownloadingInvoice(false);
     }
   };
 
@@ -291,14 +334,23 @@ export default function OrderDetail() {
 
           {/* Actions */}
           <div className="flex gap-2 flex-wrap">
-            <a
-              href={`http://localhost:8000/api/v1/orders/${order.id}/invoice`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full border border-border bg-bg-tertiary px-4 py-2 text-small hover:border-border-hover transition-colors"
+            <button
+              onClick={handleDownloadInvoice}
+              disabled={downloadingInvoice}
+              className="rounded-full border border-border bg-bg-tertiary px-4 py-2 text-small hover:border-border-hover transition-colors disabled:opacity-50 flex items-center gap-2"
             >
-              Download Invoice
-            </a>
+              {downloadingInvoice ? (
+                <>
+                  <Loader2 size={14} className="animate-spin" />
+                  Downloading...
+                </>
+              ) : (
+                <>
+                  <Download size={14} />
+                  Download Invoice
+                </>
+              )}
+            </button>
             <Link to="/shop" className="btn-accent">
               Continue Shopping
             </Link>
