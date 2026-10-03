@@ -1,20 +1,44 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, X, ArrowRight, TrendingUp } from "lucide-react";
+import { Search, X, ArrowRight, TrendingUp, Loader2 } from "lucide-react";
+import { productAPI } from "../services/api";
+import { adaptProducts } from "../utils/productAdapter";
 import { formatPrice } from "../data/products";
 
 const popularSearches = ["Headphones", "Power Bank", "Case", "LED", "Charger"];
 
 export default function SearchModal({ isOpen, onClose }) {
   const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
   const inputRef = useRef(null);
 
+  // Reset state when modal opens/closes (React 19 pattern — no setState in effect)
+  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
+  if (isOpen !== prevIsOpen) {
+    setPrevIsOpen(isOpen);
+    if (isOpen) {
+      setQuery("");
+      setResults([]);
+    }
+  }
+
+  // Reset results when query changes (React 19 pattern)
+  const [prevQuery, setPrevQuery] = useState(query);
+  if (query !== prevQuery) {
+    setPrevQuery(query);
+    if (!query.trim()) {
+      setResults([]);
+      setLoading(false);
+    }
+  }
+
   const handleClose = () => {
-    setQuery("");
     onClose();
   };
 
+  // Focus input + body scroll lock
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 100);
@@ -28,6 +52,7 @@ export default function SearchModal({ isOpen, onClose }) {
     };
   }, [isOpen]);
 
+  // Escape key handler
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === "Escape") handleClose();
@@ -37,14 +62,39 @@ export default function SearchModal({ isOpen, onClose }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
-  const filtered = query.trim()
-    ? products.filter(
-        (p) =>
-          p.name.toLowerCase().includes(query.toLowerCase()) ||
-          p.brand.toLowerCase().includes(query.toLowerCase()) ||
-          p.category.toLowerCase().includes(query.toLowerCase())
-      )
-    : [];
+  // Debounced API search
+  useEffect(() => {
+    const trimmed = query.trim();
+
+    if (!trimmed) return;
+
+    let cancelled = false;
+
+    const timer = setTimeout(() => {
+      setLoading(true);
+
+      productAPI
+        .list({ search: trimmed, per_page: 10 })
+        .then((res) => {
+          if (cancelled) return;
+          const raw = res.data.data?.data || res.data.data || [];
+          setResults(adaptProducts(raw));
+        })
+        .catch((err) => {
+          if (cancelled) return;
+          console.error("Search failed:", err);
+          setResults([]);
+        })
+        .finally(() => {
+          if (!cancelled) setLoading(false);
+        });
+    }, 300);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [query]);
 
   const showResults = query.trim().length > 0;
 
@@ -110,28 +160,42 @@ export default function SearchModal({ isOpen, onClose }) {
                         ))}
                       </div>
                     </div>
-                  ) : filtered.length > 0 ? (
+                  ) : loading ? (
+                    <div className="flex justify-center py-12">
+                      <Loader2 size={24} className="animate-spin text-accent" />
+                    </div>
+                  ) : results.length > 0 ? (
                     <div className="p-2">
                       <p className="px-3 py-2 text-tiny uppercase tracking-widest text-text-muted">
-                        {filtered.length} result{filtered.length !== 1 ? "s" : ""}
+                        {results.length} result{results.length !== 1 ? "s" : ""}
                       </p>
-                      {filtered.map((product) => {
+                      {results.map((product) => {
                         const Icon = product.icon;
                         return (
                           <Link
                             key={product.id}
-                            to={`/product/${product.id}`}
+                            to={`/product/${product.slug || product.id}`}
                             onClick={handleClose}
                             className="group flex items-center gap-3 rounded-2xl px-3 py-3 hover:bg-bg-tertiary transition-colors"
                           >
                             <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-bg-elevated overflow-hidden">
-                              <div className="absolute h-8 w-8 rounded-full bg-accent/15 blur-lg" />
-                              {Icon && (
-                                <Icon
-                                  size={22}
-                                  className="relative text-accent"
-                                  strokeWidth={1.5}
+                              {product.images?.[0] ? (
+                                <img
+                                  src={product.images[0]}
+                                  alt={product.name}
+                                  className="h-full w-full object-cover"
                                 />
+                              ) : (
+                                <>
+                                  <div className="absolute h-8 w-8 rounded-full bg-accent/15 blur-lg" />
+                                  {Icon && (
+                                    <Icon
+                                      size={22}
+                                      className="relative text-accent"
+                                      strokeWidth={1.5}
+                                    />
+                                  )}
+                                </>
                               )}
                             </div>
 
@@ -179,7 +243,7 @@ export default function SearchModal({ isOpen, onClose }) {
                     </kbd>{" "}
                     to close
                   </span>
-                  <span>Search all products</span>
+                  <span>Search across all products</span>
                 </div>
               </div>
             </div>
