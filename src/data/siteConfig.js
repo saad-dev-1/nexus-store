@@ -1,5 +1,5 @@
-﻿// Update all info here — only edit this file
-// Future mein kahin aur change karne ki zaroorat nahi
+// Single source of truth for site configuration
+// Update all site-wide info here
 
 export const siteConfig = {
   // Brand
@@ -11,22 +11,21 @@ export const siteConfig = {
   address: "Sargodha, Pakistan",
   since: "2024",
 
-  // Contact â€” SAME number dono jagah (warna confusion)
-    // Contact â€” SAME number dono jagah (warna confusion)
-    phone: "+92 342 4960779",
+  // Contact - use same number everywhere to avoid confusion
+  phone: "+92 342 4960779",
   phoneLink: "+923424960779",
-  whatsappNumber: "923424960779",    // WhatsApp â€” no +, no spaces   // WhatsApp â€” phone wala hi rakho (no +, no spaces)
+  whatsappNumber: "923424960779", // WhatsApp: no +, no spaces
   email: "sa1717595@gmail.com",
 
-  // Social â€” full URLs (baad mein actual link daalo)
+  // Social - full URLs
   social: {
-    instagram: "https://www.instagram.com/saadahm__x?stkn=MWI4Y2R0eGswbnJ6",
-    facebook: "https://www.facebook.com/share/1EHYdxkVJC/",   // Facebook ka pura URL baad mein daalo
-    twitter: "#",
+    instagram: "https://www.instagram.com/saadahm__x",
+    facebook: "https://www.facebook.com/share/1EHYdxkVJC/",
+    twitter: "",
   },
 
-  // Payment Methods (footer mein dikhte hain)
-  payments: ["COD", "JazzCash", "EasyPaisa", "Visa", "Mastercard"],
+  // Payment methods (displayed in footer)
+  payments: ["COD", "JazzCash", "EasyPaisa", "Bank Transfer"],
 
   // Shipping
   freeShippingThreshold: 2999,
@@ -39,6 +38,5 @@ export const siteConfig = {
     "Same-Day Dispatch Before 3PM",
     "Flat 10% Off on First Order",
     "Order Online, Delivered Home",
-    "Trusted by 10,000+ Customers",
   ],
 };

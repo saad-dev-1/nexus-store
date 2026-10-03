@@ -70,7 +70,7 @@ export default function Newsletter() {
               type="submit"
               className="btn-accent whitespace-nowrap group"
             >
-              {submitted ? "Subscribed ✓" : "Join Free"}
+             {submitted ? "Subscribed ✓" : "Join Free"}
               {!submitted && (
                 <ArrowRight
                   size={16}

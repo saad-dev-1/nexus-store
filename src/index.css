@@ -1,4 +1,53 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+/* Geist Variable Font — all weights in one file */
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/Geist[wght].woff2') format('woff2-variations'),
+       url('/fonts/Geist[wght].woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Fallback individual weights */
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/Geist-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/Geist-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/Geist-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/Geist-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/Geist-Black.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
 
 @tailwind base;
 @tailwind components;
@@ -13,16 +62,56 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
-
-  body {
-    @apply bg-bg-primary text-text-primary font-sans;
     overflow-x: hidden;
   }
 
-  /* Custom scrollbar */
+  body {
+    @apply bg-bg-primary text-text-primary;
+    font-family: 'Geist', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Geist', system-ui, sans-serif;
+    letter-spacing: -0.025em;
+    overflow-wrap: break-word;
+  }
+
+  /* ✅ SAFE — Long text/URLs wrap karo */
+  p, span, a, li, label, div {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+
+  /* ✅ SAFE — Images never overflow container */
+  img, video, svg, canvas {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* ✅ SAFE — Flex children can shrink (fixes text overflow in flex rows) */
+  .flex > *,
+  .inline-flex > * {
+    min-width: 0;
+  }
+
+  /* ✅ SAFE — Table doesn't break layout */
+  table {
+    max-width: 100%;
+  }
+
+  /* ✅ SAFE — Pre/code blocks wrap */
+  pre, code {
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-width: 100%;
+  }
+
+  /* Global scrollbar */
   ::-webkit-scrollbar {
     width: 8px;
+    height: 8px;
   }
   ::-webkit-scrollbar-track {
     @apply bg-bg-primary;
@@ -34,31 +123,28 @@
     @apply bg-border-strong;
   }
 
-  /* Text selection */
   ::selection {
     @apply bg-accent text-white;
   }
 }
 
 @layer components {
-  /* Container — max-width + responsive padding */
   .container-custom {
-    @apply max-w-container mx-auto px-5 md:px-8 lg:px-10;
+    @apply max-w-container mx-auto px-4 sm:px-5 md:px-8 lg:px-10;
+    width: 100%;
   }
 
-  /* Section vertical padding */
   .section-padding {
-    @apply py-16 md:py-24;
+    @apply py-12 md:py-16 lg:py-24;
   }
 
-  /* Button base */
   .btn {
     @apply inline-flex items-center justify-center gap-2 font-medium
            transition-all duration-300 ease-smooth
            disabled:opacity-50 disabled:cursor-not-allowed;
+    white-space: nowrap;
   }
 
-  /* Button variants */
   .btn-primary {
     @apply btn bg-white text-bg-primary px-6 py-3 rounded-full
            hover:bg-text-secondary hover:scale-[1.02] active:scale-[0.98];
@@ -75,18 +161,16 @@
            hover:bg-bg-tertiary hover:border-border-strong;
   }
 
-  /* Small uppercase section label */
   .section-label {
     @apply text-tiny font-semibold uppercase text-accent tracking-widest;
   }
 
-  /* Divider */
   .divider {
     @apply border-t border-border;
   }
 }
 
-  /* Hide scrollbar for horizontal scroll */
+@layer utilities {
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
@@ -94,3 +178,32 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 4px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  .font-heading {
+    font-family: 'Geist', system-ui, sans-serif;
+  }
+
+  /* Text clamping utility */
+  .text-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+}

@@ -5,23 +5,21 @@ import { siteConfig } from "../data/siteConfig";
 const footerLinks = {
   shop: [
     { label: "All Products", href: "/shop" },
-    { label: "Audio", href: "/categories/audio" },
-    { label: "Power", href: "/categories/power" },
-    { label: "Protection", href: "/categories/protection" },
-    { label: "New Arrivals", href: "/new" },
+    { label: "Audio", href: "/shop?category=audio" },
+    { label: "Power", href: "/shop?category=power" },
+    { label: "Protection", href: "/shop?category=protection" },
+    { label: "Smart Home", href: "/shop?category=smart-home" },
   ],
   support: [
     { label: "Contact Us", href: "/contact" },
-    { label: "Shipping Info", href: "/shipping" },
-    { label: "Returns", href: "/returns" },
-    { label: "Track Order", href: "/track" },
-    { label: "FAQ", href: "/faq" },
+    { label: "About NEXUS", href: "/about" },
+    { label: "My Orders", href: "/orders" },
+    { label: "My Profile", href: "/profile" },
   ],
   company: [
     { label: "About NEXUS", href: "/about" },
-    { label: "Privacy Policy", href: "/privacy" },
-    { label: "Terms of Service", href: "/terms" },
-    { label: "Blog", href: "/blog" },
+    { label: "Contact", href: "/contact" },
+    { label: "Shop All", href: "/shop" },
   ],
 };
 
@@ -51,7 +49,7 @@ const socials = [
     href: siteConfig.social.twitter,
     svg: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
-        <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
+        <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.24-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
       </svg>
     ),
   },
@@ -222,13 +220,13 @@ export default function Footer() {
           </div>
 
           <div className="text-right">
-            <p className="text-tiny font-semibold uppercase tracking-widest text-text-muted mb-1">
-              100% Original
-            </p>
-            <p className="text-small text-text-secondary">
-              Verified by 10,000+ customers
-            </p>
-          </div>
+  <p className="text-tiny font-semibold uppercase tracking-widest text-text-muted mb-1">
+    100% Original
+  </p>
+  <p className="text-small text-text-secondary">
+    Sourced from authorized distributors
+  </p>
+</div>
         </div>
 
         <div className="flex flex-col md:flex-row items-center justify-between gap-3 pt-6 border-t border-border">
@@ -237,16 +235,16 @@ export default function Footer() {
           </p>
           <div className="flex items-center gap-5">
             <Link
-              to="/privacy"
+              to="/about"
               className="text-tiny text-text-muted hover:text-text-primary transition-colors"
             >
-              Privacy
+              About
             </Link>
             <Link
-              to="/terms"
+              to="/contact"
               className="text-tiny text-text-muted hover:text-text-primary transition-colors"
             >
-              Terms
+              Contact
             </Link>
             <span className="text-tiny text-text-muted">
               Made in Pakistan 🇵🇰

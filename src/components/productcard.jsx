@@ -19,6 +19,7 @@ export default function ProductCard({ product }) {
     DEAL: "bg-error text-white",
     NEW: "bg-success text-white",
     "TOP PICK": "bg-star text-bg-primary",
+    FEATURED: "bg-star text-bg-primary",
   };
 
   const accentColors = {
@@ -42,7 +43,7 @@ export default function ProductCard({ product }) {
     hasImages && product.images.length > 1 ? product.images[1] : primaryImage;
 
   const handleCardClick = () => {
-    navigate(`/product/${product.id}`);
+    navigate(`/product/${product.slug || product.id}`);
   };
 
   const handleAddToCart = (e) => {
@@ -53,14 +54,14 @@ export default function ProductCard({ product }) {
   return (
     <div
       onClick={handleCardClick}
-      className="group flex flex-col rounded-2xl border border-border bg-bg-tertiary overflow-hidden transition-all duration-300 ease-smooth hover:border-border-hover hover:-translate-y-1 hover:shadow-card-hover cursor-pointer"
+      className="group flex h-full flex-col rounded-2xl border border-border bg-bg-tertiary overflow-hidden transition-all duration-300 ease-smooth hover:border-border-hover hover:-translate-y-1 hover:shadow-card-hover cursor-pointer"
     >
       {/* Image area */}
-      <div className="relative aspect-square bg-gradient-to-br from-bg-elevated to-bg-secondary overflow-hidden">
+      <div className="relative aspect-square bg-gradient-to-br from-bg-elevated to-bg-secondary overflow-hidden shrink-0">
         {/* Glow */}
         <div className="absolute inset-0 flex items-center justify-center">
           <div
-            className={`h-32 w-32 rounded-full ${glowColors[product.accent]} blur-3xl opacity-60 transition-opacity duration-500 group-hover:opacity-90`}
+            className={`h-32 w-32 rounded-full ${glowColors[product.accent] || glowColors.accent} blur-3xl opacity-60 transition-opacity duration-500 group-hover:opacity-90`}
           />
         </div>
 
@@ -86,7 +87,7 @@ export default function ProductCard({ product }) {
             {Icon && (
               <Icon
                 size={80}
-                className={`relative ${accentColors[product.accent]} transition-transform duration-500 ease-smooth group-hover:scale-110`}
+                className={`relative ${accentColors[product.accent] || accentColors.accent} transition-transform duration-500 ease-smooth group-hover:scale-110`}
                 strokeWidth={1.3}
               />
             )}
@@ -114,6 +115,13 @@ export default function ProductCard({ product }) {
           </span>
         )}
 
+        {/* Out of stock */}
+        {product.inStock === false && (
+          <span className="absolute top-3 right-3 rounded-full bg-error/90 text-white px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider z-10">
+            Out of Stock
+          </span>
+        )}
+
         {/* In-Cart badge */}
         {inCart && (
           <span className="absolute bottom-3 left-3 flex items-center gap-1 rounded-full bg-success/95 backdrop-blur-sm text-white px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider z-10">
@@ -122,36 +130,46 @@ export default function ProductCard({ product }) {
           </span>
         )}
 
-        {/* Quick add — appears on hover */}
+        {/* Quick add */}
         <button
           onClick={handleAddToCart}
+          disabled={product.inStock === false}
           aria-label="Add to cart"
-          className="absolute bottom-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-white text-bg-primary opacity-0 translate-y-2 transition-all duration-300 ease-smooth group-hover:opacity-100 group-hover:translate-y-0 hover:bg-accent hover:text-white active:scale-90 z-10"
+          className="absolute bottom-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-white text-bg-primary opacity-0 translate-y-2 transition-all duration-300 ease-smooth group-hover:opacity-100 group-hover:translate-y-0 hover:bg-accent hover:text-white active:scale-90 z-10 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <ShoppingBag size={16} />
         </button>
       </div>
 
-      {/* Info area */}
-      <div className="flex flex-col p-4">
+      {/* Info area — flex-1 makes this stretch */}
+      <div className="flex flex-1 flex-col p-4">
         <p className="text-tiny uppercase tracking-widest text-text-muted mb-1.5">
           {product.brand}
         </p>
+
         <h3 className="text-small font-medium text-text-primary leading-snug mb-2 line-clamp-2 min-h-[2.5rem]">
           {product.name}
         </h3>
 
-        {/* Rating */}
-        <div className="flex items-center gap-1.5 mb-3">
-          <Star size={12} className="text-star" fill="currentColor" />
-          <span className="text-tiny font-medium text-text-secondary">
-            {product.rating}
-          </span>
-          <span className="text-tiny text-text-muted">({product.reviews})</span>
+        {/* Rating — always takes same space */}
+        <div className="flex items-center gap-1.5 mb-3 min-h-[1rem]">
+          {product.reviews > 0 && product.rating > 0 ? (
+            <>
+              <Star size={12} className="text-star" fill="currentColor" />
+              <span className="text-tiny font-medium text-text-secondary">
+                {product.rating}
+              </span>
+              <span className="text-tiny text-text-muted">
+                ({product.reviews})
+              </span>
+            </>
+          ) : (
+            <span className="text-tiny text-text-muted">No reviews yet</span>
+          )}
         </div>
 
-        {/* Price */}
-        <div className="flex items-baseline gap-2">
+        {/* Price — pinned to bottom with mt-auto */}
+        <div className="flex items-baseline gap-2 flex-wrap mt-auto">
           <span className="text-h4 font-bold text-text-primary">
             {formatPrice(product.price)}
           </span>

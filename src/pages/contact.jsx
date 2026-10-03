@@ -88,7 +88,7 @@ export default function Contact() {
 
     setIsSubmitting(true);
 
-    // WhatsApp pe message bhejo
+    // Send message via WhatsApp
     const msg = `Hi NEXUS!%0A%0AName: ${form.name}%0AEmail: ${form.email}%0A%0A${form.message}`;
     const url = `https://wa.me/${siteConfig.whatsappNumber}?text=${msg}`;
     window.open(url, "_blank");

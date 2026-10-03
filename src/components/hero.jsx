@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight, Star, Truck, ShieldCheck, RotateCcw } from "lucide-react";
+import { ArrowRight, Truck, ShieldCheck, RotateCcw } from "lucide-react";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -23,8 +23,8 @@ export default function Hero() {
         }}
       />
 
-      <div className="container-custom py-4 md:py-6 lg:py-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+      <div className="container-custom pt-2 pb-4 md:pt-3 md:pb-6 lg:pt-4 lg:pb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
 
           {/* LEFT — Content */}
           <motion.div
@@ -33,29 +33,30 @@ export default function Hero() {
             animate="show"
             className="lg:col-span-6 flex flex-col items-start"
           >
+            {/* Free delivery badge — simple */}
             <motion.div
               variants={fadeUp}
-              className="flex items-center gap-2 rounded-full border border-border px-4 py-2 mb-5"
+              className="flex items-center gap-2 rounded-full border border-border px-4 py-2 mb-4"
             >
-              <div className="flex items-center gap-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={12} className="text-star" fill="currentColor" />
-                ))}
-              </div>
+              <Truck size={14} className="text-accent" />
               <span className="text-tiny text-text-secondary font-medium">
-                Rated 4.9 • 10,000+ customers
+                Free delivery across Pakistan
               </span>
             </motion.div>
 
+            {/* Hero heading — gradient */}
             <motion.h1
               variants={fadeUp}
               className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-[-0.04em] leading-[1.03] mb-5"
             >
               Gear that{" "}
-              <span className="text-accent">keeps up</span>{" "}
+              <span className="bg-gradient-to-r from-accent via-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                keeps up
+              </span>{" "}
               with you.
             </motion.h1>
 
+            {/* Subtitle */}
             <motion.p
               variants={fadeUp}
               className="text-body text-text-secondary max-w-xl mb-7"
@@ -64,6 +65,7 @@ export default function Hero() {
               Cash on Delivery, and a 1-year warranty on everything we sell.
             </motion.p>
 
+            {/* Buttons */}
             <motion.div
               variants={fadeUp}
               className="flex flex-wrap items-center gap-3 mb-8"
@@ -80,6 +82,7 @@ export default function Hero() {
               </Link>
             </motion.div>
 
+            {/* Trust badges */}
             <motion.div
               variants={fadeUp}
               className="flex flex-wrap items-center gap-x-6 gap-y-3"
@@ -97,7 +100,7 @@ export default function Hero() {
             </motion.div>
           </motion.div>
 
-          {/* RIGHT — 5-Tile Grid (Over Version) */}
+          {/* RIGHT — 5-Tile Grid */}
           <motion.div
             variants={stagger}
             initial="hidden"
@@ -106,81 +109,96 @@ export default function Hero() {
           >
             <div className="relative grid grid-cols-12 grid-rows-12 gap-3 h-[400px] md:h-[480px] lg:h-[500px]">
 
-              {/* Audio image */}
+              {/* Audio image — clickable */}
               <motion.div
                 variants={fadeUp}
-                className="col-span-7 row-span-7 rounded-3xl border border-border overflow-hidden relative group"
+                className="col-span-7 row-span-7"
               >
-                <img
-                  src="https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg?auto=compress&cs=tinysrgb&w=800"
-                  alt="Audio Collection"
-                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-5 z-10">
-                  <p className="text-tiny font-semibold uppercase tracking-widest text-accent mb-1">
-                    Featured
-                  </p>
-                  <p className="text-h4 font-bold text-white">Audio Collection</p>
-                  <p className="text-tiny text-white/70 mt-0.5">Headphones • Earbuds</p>
-                </div>
+                <Link
+                  to="/shop?category=audio"
+                  className="group block h-full rounded-3xl border border-border overflow-hidden relative"
+                >
+                  <img
+                    src="https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg?auto=compress&cs=tinysrgb&w=800"
+                    alt="Audio Collection"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-5 z-10">
+                    <p className="text-tiny font-semibold uppercase tracking-widest text-accent mb-1">
+                      Featured
+                    </p>
+                    <p className="text-h4 font-bold text-white">Audio Collection</p>
+                    <p className="text-tiny text-white/70 mt-0.5">Headphones • Earbuds</p>
+                  </div>
+                </Link>
               </motion.div>
 
-              {/* Power image */}
+              {/* Power image — clickable */}
               <motion.div
                 variants={fadeUp}
-                className="col-span-5 row-span-4 rounded-3xl border border-border overflow-hidden relative group"
+                className="col-span-5 row-span-4"
               >
-                <img
-                  src="https://images.pexels.com/photos/4526407/pexels-photo-4526407.jpeg?auto=compress&cs=tinysrgb&w=600"
-                  alt="Power Gear"
-                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
-                  <p className="text-small font-bold text-white">Power Gear</p>
-                  <p className="text-tiny text-white/70 mt-0.5">Chargers • Banks</p>
-                </div>
+                <Link
+                  to="/shop?category=power"
+                  className="group block h-full rounded-3xl border border-border overflow-hidden relative"
+                >
+                  <img
+                    src="https://images.pexels.com/photos/4526407/pexels-photo-4526407.jpeg?auto=compress&cs=tinysrgb&w=600"
+                    alt="Power Gear"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
+                    <p className="text-small font-bold text-white">Power Gear</p>
+                    <p className="text-tiny text-white/70 mt-0.5">Chargers • Banks</p>
+                  </div>
+                </Link>
               </motion.div>
 
-              {/* 500+ badge */}
+              {/* 100% badge — subtle */}
               <motion.div
                 variants={fadeUp}
-                className="col-span-5 row-span-3 rounded-3xl border border-border bg-gradient-to-br from-bg-tertiary to-bg-secondary p-4 flex flex-col justify-center relative overflow-hidden"
+                className="col-span-5 row-span-3 rounded-3xl border border-accent/25 bg-gradient-to-br from-accent/8 via-bg-tertiary to-bg-secondary p-4 flex flex-col justify-center relative overflow-hidden"
               >
                 <div className="absolute -top-6 -right-6 h-20 w-20 rounded-full bg-accent/20 blur-2xl" />
-                <p className="text-h3 font-extrabold text-accent relative leading-none">
-                  500+
+                <p className="text-h3 font-bold text-accent relative leading-none">
+                  100%
                 </p>
                 <p className="text-tiny text-text-muted mt-1 relative">
-                  Products in stock
+                  Original products
                 </p>
               </motion.div>
 
-              {/* Protection image */}
+              {/* Protection image — clickable */}
               <motion.div
                 variants={fadeUp}
-                className="col-span-7 row-span-5 rounded-3xl border border-border overflow-hidden relative group"
+                className="col-span-7 row-span-5"
               >
-                <img
-                  src="https://picsum.photos/seed/protection1/800/600"
-                  alt="Protection Range"
-                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
-                  <p className="text-small font-bold text-white">Protection Range</p>
-                  <p className="text-tiny text-white/70 mt-0.5">Cases • Guards</p>
-                </div>
+                <Link
+                  to="/shop?category=protection"
+                  className="group block h-full rounded-3xl border border-border overflow-hidden relative"
+                >
+                  <img
+                    src="https://picsum.photos/seed/protection1/800/600"
+                    alt="Protection Range"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
+                    <p className="text-small font-bold text-white">Protection Range</p>
+                    <p className="text-tiny text-white/70 mt-0.5">Cases • Guards</p>
+                  </div>
+                </Link>
               </motion.div>
 
-              {/* 1 Year badge */}
+              {/* 1 Year badge — subtle */}
               <motion.div
                 variants={fadeUp}
-                className="col-span-5 row-span-5 rounded-3xl border border-border bg-gradient-to-br from-success/10 via-bg-tertiary to-bg-secondary p-4 flex flex-col justify-center relative overflow-hidden"
+                className="col-span-5 row-span-5 rounded-3xl border border-success/25 bg-gradient-to-br from-success/8 via-bg-tertiary to-bg-secondary p-4 flex flex-col justify-center relative overflow-hidden"
               >
                 <div className="absolute -bottom-6 -right-6 h-20 w-20 rounded-full bg-success/20 blur-2xl" />
-                <p className="text-h3 font-extrabold text-success relative leading-none">
+                <p className="text-h3 font-bold text-success relative leading-none">
                   1 Year
                 </p>
                 <p className="text-tiny text-text-muted mt-1 relative">

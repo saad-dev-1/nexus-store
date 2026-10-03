@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, X, ArrowRight, TrendingUp } from "lucide-react";
-import { products, formatPrice } from "../data/products";
+import { formatPrice } from "../data/products";
 
 const popularSearches = ["Headphones", "Power Bank", "Case", "LED", "Charger"];
 
@@ -179,7 +179,7 @@ export default function SearchModal({ isOpen, onClose }) {
                     </kbd>{" "}
                     to close
                   </span>
-                  <span>Search across 500+ products</span>
+                  <span>Search all products</span>
                 </div>
               </div>
             </div>

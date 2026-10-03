@@ -140,6 +140,8 @@ export const products = [
   },
 ];
 
+// Price formatter for PKR currency
 export const formatPrice = (price) => {
-  return `Rs. ${price.toLocaleString("en-PK")}`;
+  const num = Number(price) || 0;
+  return `Rs. ${num.toLocaleString("en-PK")}`;
 };

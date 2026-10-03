@@ -32,10 +32,10 @@ const values = [
 ];
 
 const stats = [
-  { value: "10,000+", label: "Happy Customers" },
-  { value: "500+", label: "Products" },
-  { value: "4.9★", label: "Average Rating" },
-  { value: "2-4 Days", label: "Delivery Time" },
+  { value: "100%", label: "Original Products" },
+  { value: "24h", label: "Fast Dispatch" },
+  { value: "7 Days", label: "Easy Returns" },
+  { value: "COD", label: "Nationwide" },
 ];
 
 const fadeUp = {

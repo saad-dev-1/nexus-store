@@ -36,8 +36,9 @@ export default {
         star: "#FBBF24",
       },
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
-      },
+  sans: ["Geist", "system-ui", "sans-serif"],
+  heading: ["Geist", "system-ui", "sans-serif"],
+},
       fontSize: {
         display: ["4.5rem", { lineHeight: "1.05", letterSpacing: "-0.03em", fontWeight: "700" }],
         h1: ["3.5rem", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "700" }],

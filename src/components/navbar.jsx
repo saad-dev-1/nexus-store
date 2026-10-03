@@ -1,26 +1,46 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Search, ShoppingBag, Menu, X, Zap } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Search, ShoppingBag, Menu, X, Zap, User, LogOut, Package } from "lucide-react";
 import { useCart } from "../context/cartcontext";
+import { useAuth } from "../context/authcontext";
 import SearchModal from "./searchmodal";
 
 const navLinks = [
+  { label: "Home", href: "/" },
   { label: "Shop", href: "/shop" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
 
 export default function Navbar() {
+  const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const { openCart, totalItems } = useCart();
+  const { user, isAuthenticated, logout } = useAuth();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Close user menu on outside click
+  useEffect(() => {
+    if (!userMenuOpen) return;
+    const handleClick = () => setUserMenuOpen(false);
+    window.addEventListener("click", handleClick);
+    return () => window.removeEventListener("click", handleClick);
+  }, [userMenuOpen]);
+
+  const handleLogout = async () => {
+    await logout();
+    setUserMenuOpen(false);
+    setMobileOpen(false);
+    navigate("/");
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full">
@@ -41,7 +61,7 @@ export default function Navbar() {
           </Link>
 
           {/* Center Links — Desktop */}
-          <ul className="hidden md:flex items-center gap-8">
+          <ul className="hidden lg:flex items-center gap-6 xl:gap-8">
             {navLinks.map((link) => (
               <li key={link.label}>
                 <Link
@@ -60,12 +80,86 @@ export default function Navbar() {
             <button
               onClick={() => setSearchOpen(true)}
               aria-label="Open search"
-              className="hidden md:flex h-9 w-9 items-center justify-center rounded-full hover:bg-bg-tertiary transition-colors"
+              className="hidden lg:flex h-9 w-9 items-center justify-center rounded-full hover:bg-bg-tertiary transition-colors"
             >
               <Search size={18} className="text-text-secondary" />
             </button>
 
-            {/* Cart button — opens drawer */}
+            {/* User menu (desktop) */}
+            <div className="hidden lg:block relative">
+              {isAuthenticated ? (
+                <>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setUserMenuOpen(!userMenuOpen);
+                    }}
+                    aria-label="User menu"
+                    className="flex items-center gap-1.5 h-9 px-3 rounded-full hover:bg-bg-tertiary transition-colors"
+                  >
+                    <User size={18} className="text-text-secondary" />
+                    <span className="text-small font-medium text-text-secondary max-w-[80px] truncate">
+                      {user?.name?.split(" ")[0]}
+                    </span>
+                  </button>
+
+                  {userMenuOpen && (
+                    <div
+                      onClick={(e) => e.stopPropagation()}
+                      className="absolute right-0 top-full mt-2 min-w-[180px] rounded-2xl border border-border bg-bg-secondary p-1.5 shadow-2xl z-50"
+                    >
+                      <div className="px-3 py-2 border-b border-border mb-1">
+                        <p className="text-tiny font-semibold text-text-primary truncate">
+                          {user?.name}
+                        </p>
+                        <p className="text-tiny text-text-muted truncate">
+                          {user?.email}
+                        </p>
+                      </div>
+
+                      <Link
+                        to="/profile"
+                        onClick={() => setUserMenuOpen(false)}
+                        className="w-full flex items-center gap-2 rounded-xl px-3 py-2.5 text-small text-text-secondary hover:bg-bg-tertiary hover:text-text-primary transition-colors"
+                      >
+                        <User size={14} />
+                        My Profile
+                      </Link>
+
+                      <Link
+                        to="/orders"
+                        onClick={() => setUserMenuOpen(false)}
+                        className="w-full flex items-center gap-2 rounded-xl px-3 py-2.5 text-small text-text-secondary hover:bg-bg-tertiary hover:text-text-primary transition-colors"
+                      >
+                        <Package size={14} />
+                        My Orders
+                      </Link>
+
+                      <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-2 rounded-xl px-3 py-2.5 text-small text-error hover:bg-error/10 transition-colors"
+                      >
+                        <LogOut size={14} />
+                        Logout
+                      </button>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <Link
+                  to="/login"
+                  aria-label="Login"
+                  className="flex items-center gap-1.5 h-9 px-3 rounded-full hover:bg-bg-tertiary transition-colors"
+                >
+                  <User size={18} className="text-text-secondary" />
+                  <span className="text-small font-medium text-text-secondary">
+                    Login
+                  </span>
+                </Link>
+              )}
+            </div>
+
+            {/* Cart button */}
             <button
               onClick={openCart}
               aria-label="Open cart"
@@ -82,7 +176,7 @@ export default function Navbar() {
             {/* Shop Now button */}
             <Link
               to="/shop"
-              className="hidden md:inline-flex btn-primary !py-2 !px-5 text-small"
+              className="hidden lg:inline-flex btn-primary !py-2 !px-5 text-small"
             >
               Shop Now
             </Link>
@@ -91,7 +185,7 @@ export default function Navbar() {
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Toggle menu"
-              className="md:hidden flex h-9 w-9 items-center justify-center rounded-full hover:bg-bg-tertiary transition-colors"
+              className="lg:hidden flex h-9 w-9 items-center justify-center rounded-full hover:bg-bg-tertiary transition-colors"
             >
               {mobileOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
@@ -101,10 +195,9 @@ export default function Navbar() {
 
       {/* Mobile Menu Dropdown */}
       {mobileOpen && (
-        <div className="md:hidden container-custom mt-2">
+        <div className="lg:hidden container-custom mt-2">
           <div className="rounded-2xl bg-bg-secondary border border-border p-3 shadow-card backdrop-blur-xl">
             <ul className="flex flex-col gap-1">
-              {/* Mobile search button */}
               <li>
                 <button
                   onClick={() => {
@@ -129,6 +222,62 @@ export default function Navbar() {
                   </Link>
                 </li>
               ))}
+
+              {/* Auth (mobile) */}
+              {isAuthenticated ? (
+                <>
+                  <li className="border-t border-border pt-2 mt-1">
+                    <div className="px-4 py-2">
+                      <p className="text-tiny font-semibold text-text-primary truncate">
+                        {user?.name}
+                      </p>
+                      <p className="text-tiny text-text-muted truncate">
+                        {user?.email}
+                      </p>
+                    </div>
+                  </li>
+                  <li>
+                    <Link
+                      to="/profile"
+                      onClick={() => setMobileOpen(false)}
+                      className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-small font-medium text-text-secondary hover:text-text-primary hover:bg-bg-tertiary transition-colors"
+                    >
+                      <User size={16} />
+                      My Profile
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/orders"
+                      onClick={() => setMobileOpen(false)}
+                      className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-small font-medium text-text-secondary hover:text-text-primary hover:bg-bg-tertiary transition-colors"
+                    >
+                      <Package size={16} />
+                      My Orders
+                    </Link>
+                  </li>
+                  <li>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-small font-medium text-error hover:bg-error/10 transition-colors"
+                    >
+                      <LogOut size={16} />
+                      Logout
+                    </button>
+                  </li>
+                </>
+              ) : (
+                <li className="border-t border-border pt-2 mt-1">
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileOpen(false)}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-small font-medium text-text-secondary hover:text-text-primary hover:bg-bg-tertiary transition-colors"
+                  >
+                    <User size={16} />
+                    Login / Register
+                  </Link>
+                </li>
+              )}
 
               <li className="pt-1">
                 <Link
