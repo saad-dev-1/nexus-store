@@ -68,54 +68,22 @@ export default function ProductCard({ product }) {
         {/* Image OR Icon fallback */}
         {primaryImage && !imgError ? (
           <>
-            {/* Primary Image — soft, muted, premium */}
+            {/* Primary Image */}
             <img
               src={primaryImage}
               alt={product.name}
               onError={() => setImgError(true)}
               loading="lazy"
-              className="
-                absolute inset-0 h-full w-full object-cover
-                scale-110
-                blur-[1.5px]
-                saturate-[0.6]
-                contrast-[1.02]
-                brightness-[0.82]
-                transition-all duration-700 ease-smooth
-                group-hover:scale-105
-                group-hover:blur-0
-                group-hover:saturate-100
-                group-hover:contrast-100
-                group-hover:brightness-100
-                group-hover:opacity-0
-              "
+              className="absolute inset-0 h-full w-full object-cover transition-all duration-700 ease-smooth group-hover:scale-105 group-hover:opacity-0"
             />
 
-            {/* Hover Image — soft, muted, premium */}
+            {/* Hover Image */}
             <img
               src={hoverImage}
               alt={`${product.name} alternate view`}
               loading="lazy"
-              className="
-                absolute inset-0 h-full w-full object-cover
-                scale-110
-                blur-[1.5px]
-                saturate-[0.6]
-                contrast-[1.02]
-                brightness-[0.82]
-                opacity-0
-                transition-all duration-700 ease-smooth
-                group-hover:scale-105
-                group-hover:blur-0
-                group-hover:saturate-100
-                group-hover:contrast-100
-                group-hover:brightness-100
-                group-hover:opacity-100
-              "
+              className="absolute inset-0 h-full w-full object-cover opacity-0 transition-all duration-700 ease-smooth group-hover:opacity-100 group-hover:scale-105"
             />
-
-            {/* Premium dark overlay — fades on hover */}
-            <div className="absolute inset-0 bg-black/20 pointer-events-none z-[1] transition-opacity duration-700 group-hover:opacity-0" />
           </>
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
