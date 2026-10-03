@@ -74,18 +74,7 @@ export default function ProductCard({ product }) {
               alt={product.name}
               onError={() => setImgError(true)}
               loading="lazy"
-              className="
-                absolute inset-0 h-full w-full object-cover
-                scale-105
-                blur-[0.3px]
-                saturate-[0.85]
-                contrast-[0.95]
-                brightness-95
-                transition-all duration-700 ease-smooth
-                group-hover:scale-110 group-hover:blur-0
-                group-hover:saturate-100 group-hover:contrast-100 group-hover:brightness-100
-                group-hover:opacity-0
-              "
+              className="absolute inset-0 h-full w-full object-cover scale-105 blur-[0.4px] saturate-[0.85] contrast-[0.95] brightness-95 transition-all duration-700 ease-smooth group-hover:scale-110 group-hover:blur-0 group-hover:saturate-100 group-hover:contrast-100 group-hover:brightness-100 group-hover:opacity-0"
             />
 
             {/* Hover Image — soft + premium */}
@@ -93,23 +82,11 @@ export default function ProductCard({ product }) {
               src={hoverImage}
               alt={`${product.name} alternate view`}
               loading="lazy"
-              className="
-                absolute inset-0 h-full w-full object-cover
-                scale-105
-                blur-[0.3px]
-                saturate-[0.85]
-                contrast-[0.95]
-                brightness-95
-                opacity-0
-                transition-all duration-700 ease-smooth
-                group-hover:scale-110 group-hover:blur-0
-                group-hover:saturate-100 group-hover:contrast-100 group-hover:brightness-100
-                group-hover:opacity-100
-              "
+              className="absolute inset-0 h-full w-full object-cover scale-105 blur-[0.4px] saturate-[0.85] contrast-[0.95] brightness-95 opacity-0 transition-all duration-700 ease-smooth group-hover:scale-110 group-hover:blur-0 group-hover:saturate-100 group-hover:contrast-100 group-hover:brightness-100 group-hover:opacity-100"
             />
 
-            {/* Premium dark overlay — consistency */}
-            <div className="absolute inset-0 bg-black/10 pointer-events-none z-[1] transition-opacity duration-700 group-hover:opacity-0" />
+            {/* Premium dark overlay */}
+            <div className="absolute inset-0 bg-black/15 pointer-events-none z-[1] transition-opacity duration-700 group-hover:opacity-0" />
           </>
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
@@ -170,7 +147,7 @@ export default function ProductCard({ product }) {
         </button>
       </div>
 
-      {/* Info area — flex-1 makes this stretch */}
+      {/* Info area */}
       <div className="flex flex-1 flex-col p-4">
         <p className="text-tiny uppercase tracking-widest text-text-muted mb-1.5">
           {product.brand}
@@ -180,7 +157,6 @@ export default function ProductCard({ product }) {
           {product.name}
         </h3>
 
-        {/* Rating — always takes same space */}
         <div className="flex items-center gap-1.5 mb-3 min-h-[1rem]">
           {product.reviews > 0 && product.rating > 0 ? (
             <>
@@ -197,7 +173,6 @@ export default function ProductCard({ product }) {
           )}
         </div>
 
-        {/* Price — pinned to bottom with mt-auto */}
         <div className="flex items-baseline gap-2 flex-wrap mt-auto">
           <span className="text-h4 font-bold text-text-primary">
             {formatPrice(product.price)}
