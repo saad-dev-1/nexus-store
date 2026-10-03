@@ -88,7 +88,7 @@ export default function Login() {
                   value={form.email}
                   onChange={handleChange}
                   required
-                  placeholder="••••••••"
+                  placeholder="you@example.com"
                   className="w-full rounded-xl border border-border bg-bg-tertiary pl-10 pr-4 py-3 text-small text-text-primary placeholder:text-text-muted focus:border-accent focus:outline-none transition-colors"
                 />
               </div>
@@ -109,7 +109,7 @@ export default function Login() {
                   value={form.password}
                   onChange={handleChange}
                   required
-                  placeholder="••••••••"
+                  placeholder="Enter your password"
                   className="w-full rounded-xl border border-border bg-bg-tertiary pl-10 pr-4 py-3 text-small text-text-primary placeholder:text-text-muted focus:border-accent focus:outline-none transition-colors"
                 />
               </div>
