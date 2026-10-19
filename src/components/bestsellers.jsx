@@ -1,11 +1,9 @@
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import SectionHeading from "./sectionheading";
 import ProductCard from "./productcard";
-import { productAPI } from "../services/api";
-import { adaptProducts } from "../utils/productAdapter";
+import { products } from "../data/products";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -17,50 +15,20 @@ const stagger = {
   show: { transition: { staggerChildren: 0.08 } },
 };
 
-export default function BestSellers() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    const run = async () => {
-      try {
-        const res = await productAPI.list({ featured: true, per_page: 4 });
-        if (cancelled) return;
-        const raw = res.data.data?.data || res.data.data || [];
-        setProducts(adaptProducts(raw));
-      } catch (err) {
-        if (cancelled) return;
-        console.error("Featured products fetch failed:", err);
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    };
-
-    run();
-    return () => { cancelled = true; };
-  }, []);
+export default function Bestsellers() {
+  // Hum direct pehle 4 products le rahe hain taake kabhi khali na dikhe
+  const featuredProducts = products.slice(0, 4);
 
   return (
     <section className="section-padding">
       <div className="container-custom">
         <SectionHeading
-  label="Featured"
-  title="Top picks this month"
-  subtitle="Our current favourite products. Tap to add to your cart."
-
+          label="Featured"
+          title="Top picks this month"
+          subtitle="Our current favourite products. Tap to add to your cart."
         />
 
-        {loading ? (
-          <div className="flex justify-center py-16">
-            <Loader2 size={32} className="animate-spin text-accent" />
-          </div>
-        ) : products.length === 0 ? (
-          <div className="text-center py-12 text-text-muted">
-            No featured products available
-          </div>
-        ) : (
+        {featuredProducts.length > 0 ? (
           <motion.div
             variants={stagger}
             initial="hidden"
@@ -68,12 +36,20 @@ export default function BestSellers() {
             viewport={{ once: true, margin: "-100px" }}
             className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5"
           >
-            {products.map((product) => (
+            {featuredProducts.map((product) => (
               <motion.div key={product.id} variants={fadeUp}>
+                {/* ProductCard tumhari products.js wali exact images use karega */}
                 <ProductCard product={product} />
               </motion.div>
             ))}
           </motion.div>
+        ) : (
+          <div className="rounded-3xl border border-border bg-bg-tertiary p-16 text-center">
+            <p className="text-h4 font-semibold mb-2">No featured products available</p>
+            <p className="text-small text-text-secondary">
+              Check back later for new drops.
+            </p>
+          </div>
         )}
 
         <motion.div

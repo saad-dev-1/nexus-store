@@ -48,9 +48,9 @@ export const products = [
     badge: "NEW",
     icon: Shield,
     accent: "success",
-        images: [
-      "https://picsum.photos/seed/phonecase1/800/800",
-      "https://picsum.photos/seed/phonecase2/800/800",
+    images: [
+      "/products/pexels-gentcreate-18221358.webp",
+      "/products/pexels-aju-bee-325140257-29004274.webp",
     ],
   },
   {
@@ -65,9 +65,9 @@ export const products = [
     badge: "TOP PICK",
     icon: Lightbulb,
     accent: "purple",
-        images: [
-      "https://picsum.photos/seed/ledstrip1/800/800",
-      "https://picsum.photos/seed/ledstrip2/800/800",
+    images: [
+      "/products/pexels-pramodtiwari-13620266.webp",
+      "/products/pexels-gyetimova-14528277.webp",
     ],
   },
   {

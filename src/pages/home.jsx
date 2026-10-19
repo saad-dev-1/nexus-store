@@ -3,7 +3,7 @@ import CategoryGuide from "../components/categoryguide";
 import BestSellers from "../components/bestsellers";
 import CategoryBento from "../components/categorybento";
 import WhyNx from "../components/whynx";
-import Reviews from "../components/reviews";
+import Lookbook from "../components/lookbook"; // <-- Naya import
 import Newsletter from "../components/newsletter";
 
 export default function Home() {
@@ -14,7 +14,7 @@ export default function Home() {
       <BestSellers />
       <CategoryBento />
       <WhyNx />
-      <Reviews />
+      <Lookbook /> {/* <-- Yahan add karo */}
       <Newsletter />
     </>
   );
